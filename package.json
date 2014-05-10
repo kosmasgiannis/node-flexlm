@@ -1,0 +1,37 @@
+{
+    "name":"flexlm",
+    "version":"0.0.1",
+    "description" : "flexlm parses FlexNet Publisher license files.",
+    "author": {
+        "name" : "Giannis Kosmas",
+        "email" : "kosmasgiannis@gmail.com"
+    },
+    "keywords": [
+        "flexlm",
+        "flexnet publisher",
+        "license management",
+        "drm",
+        "digital rights management"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "http://github.com/kosmasgiannis/node-flexlm.git"
+    },
+    "bugs": {
+      "url": "http://github.com/kosmasgiannis/node-flexlm/issues"
+    },
+    "main": "flexlm.js",
+    "engines" : {
+        "node" : "*"
+    },
+    "license": "MIT",
+    "dependencies" : {
+        "dateformat" : "1.0.7-1.2.3"
+    },
+    "devDependencies" : {
+        "tap" : "*"
+    },
+    "scripts" : {
+        "test" : "set -e; cd test ; find . -name '*.js' -exec echo --- {} --- ';' -exec node {} ';'"
+    }
+}
