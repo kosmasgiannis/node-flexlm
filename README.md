@@ -6,7 +6,7 @@ flexlm parses FlexNet Publisher license files.
 
 [![Dependency Status](https://gemnasium.com/kosmasgiannis/node-flexlm.png)](https://gemnasium.com/kosmasgiannis/node-flexlm)
 
-[![NPM](https://nodei.co/npm/node-flexlm.png)](https://nodei.co/npm/node-flexlm/)
+[![NPM](https://nodei.co/npm/flexlm.png)](https://nodei.co/npm/flexlm/)
 
 ####Usage
 
