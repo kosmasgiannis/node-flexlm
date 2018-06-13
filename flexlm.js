@@ -30,9 +30,14 @@ var flexlm = function flexlm (filename) {
     var feature;
 
     for (i=0; i<lines.length; i++) {
-      line = lines[i].trim();
+      line = lines[i];
+      if (line.indexOf('#') !== -1) { // Strip out comments
+        line = line.substr(0, line.indexOf('#'));
+      }
 
-      if ( ( line.length > 0 ) && ( line.charAt(0) !== "#")) {  // Skip comments and empty lines
+      line = line.trim();
+
+      if ( line.length > 0 ) {  // Skip comments and empty lines
         if (newline) {
           _licarr.push(line);
         } else {
