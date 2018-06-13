@@ -4,8 +4,6 @@ flexlm parses FlexNet Publisher license files.
 
 ##Installation
 
-[![Dependency Status](https://gemnasium.com/kosmasgiannis/node-flexlm.png)](https://gemnasium.com/kosmasgiannis/node-flexlm)
-
 [![NPM](https://nodei.co/npm/flexlm.png)](https://nodei.co/npm/flexlm/)
 
 ####Usage
@@ -21,5 +19,3 @@ flexlm parses FlexNet Publisher license files.
     console.log(lic1.findExpirations("orbit"));
     console.log(lic1.findAllExpirations());
     console.log(lic1.findExpired("orbit", 10));
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kosmasgiannis/node-flexlm/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
