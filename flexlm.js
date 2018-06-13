@@ -11,6 +11,7 @@
 'use strict';
 
 var fs = require('fs');
+var util = require('util');
 var dateFormat=require('dateformat');
 
 var flexlm = function flexlm (filename) {
@@ -182,6 +183,10 @@ flexlm.prototype = {
       });
     });
     return expired;
+  },
+
+  dump: function dump() {
+    console.log(util.inspect(this, {depth:null}));
   }
 
 };

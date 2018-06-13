@@ -9,3 +9,5 @@
     console.log(lic1.findExpirations('orbit'));
     console.log(lic1.findAllExpirations());
     console.log(lic1.findExpired('orbit', 10));
+
+    lic1.dump();
