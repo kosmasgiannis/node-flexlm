@@ -1,6 +1,6 @@
 {
     "name":"flexlm",
-    "version":"0.0.3",
+    "version":"0.1.1",
     "description" : "flexlm parses FlexNet Publisher license files.",
     "author": {
         "name" : "Giannis Kosmas",
