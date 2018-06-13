@@ -8,77 +8,74 @@
 //
 // -----------------------------------------------------------------------------
 
-"use strict";
+'use strict';
 
 var fs = require('fs');
-var dateFormat=require("dateformat");
+var dateFormat=require('dateformat');
 
 var flexlm = function flexlm (filename) {
 
-    this.server =  null;
-    this.vendors = [];
-    this.features = [];
+  this.server =  null;
+  this.vendors = [];
+  this.features = [];
 
-    var lic = fs.readFileSync(filename, {encoding : "ascii"} );
-    var lines = lic.split('\n');
-    var i;
-    var line;
-    var newline = true;
-    var _licarr = [];
-    var currentVendor = null;
-    var currentServer = null
-    var feature;
+  var lic = fs.readFileSync(filename, {encoding : 'ascii'} );
+  var lines = lic.split('\n');
+  var i;
+  var line;
+  var newline = true;
+  var _licarr = [];
+  var currentVendor = null;
+  var currentServer = null;
+  var feature;
 
-    for (i=0; i<lines.length; i++) {
-      line = lines[i];
-      if (line.indexOf('#') !== -1) { // Strip out comments
-        line = line.substr(0, line.indexOf('#'));
+  for (i=0; i<lines.length; i++) {
+    line = lines[i];
+    if (line.indexOf('#') !== -1) { // Strip out comments
+      line = line.substr(0, line.indexOf('#'));
+    }
+
+    line = line.trim();
+
+    if ( line.length > 0 ) {  // Skip comments and empty lines
+      if (newline) {
+        _licarr.push(line);
+      } else {
+        _licarr[_licarr.length-1] = _licarr[_licarr.length-1].substr(0,_licarr[_licarr.length-1].length-1) + line;
       }
+      newline = line.charAt(line.length-1) !== '\\';
+    }
+  }
 
-      line = line.trim();
+  for (i=0; i < _licarr.length; i++) {
 
-      if ( line.length > 0 ) {  // Skip comments and empty lines
-        if (newline) {
-          _licarr.push(line);
-        } else {
-          _licarr[_licarr.length-1] = _licarr[_licarr.length-1].substr(0,_licarr[_licarr.length-1].length-1) + line;
+    line = _licarr[i].split(' ');
+    switch (line[0].toLowerCase()) {
+      case 'server' :
+        if (currentServer === null) {
+          currentServer = parseServer(line);
+          this.server = currentServer;
         }
-        newline = line.charAt(line.length-1) !== "\\";
-      }
+        break;
+      case 'use_server' :
+        break;
+      case 'daemon' :  // same info as vendor since FLEXlm v6.0
+      case 'vendor' :
+        currentVendor = parseVendor(line);
+        this.vendors.push(currentVendor);
+        break;
+      case 'increment' :
+      case 'feature' :
+        feature = parseFeature(line);
+        if (typeof this.features[feature.vendor] == 'undefined') {
+          this.features[feature.vendor] = [];
+        }
+        this.features[feature.vendor].push(feature);
+        break;
+      default : break;
     }
-
-    for (i=0; i < _licarr.length; i++) {
-
-      line = _licarr[i].split(' ');
-      switch (line[0].toLowerCase()) {
-
-        case     "server" :
-                            if (currentServer === null) {
-                              currentServer = parseServer(line);
-                              this.server = currentServer;
-                            }
-                            break;
-
-        case "use_server" : break;
-
-        case     "daemon" :  // same info as vendor since FLEXlm v6.0
-        case     "vendor" : currentVendor = parseVendor(line);
-                            this.vendors.push(currentVendor);
-                            break;
-
-        case  "increment" :
-        case    "feature" :
-                            feature = parseFeature(line);
-                            if (typeof this.features[feature.vendor] == 'undefined') {
-                              this.features[feature.vendor] = [];
-                            }
-                            this.features[feature.vendor].push(feature);
-                            break;
-
-                  default : break;
-      }
-    }
-}
+  }
+};
 
 flexlm.prototype = {
 
@@ -112,7 +109,7 @@ flexlm.prototype = {
   },
 
   getFeatures: function getFeatures(vendor) {
-    if (typeof this.features[vendor] !== "undefined") {
+    if (typeof this.features[vendor] !== 'undefined') {
       return this.features[vendor];
     }
     return null;
@@ -130,7 +127,7 @@ flexlm.prototype = {
 
     var vf = null;
     var fid = null;
-    if (typeof this.features[vendor] !== "undefined") {
+    if (typeof this.features[vendor] !== 'undefined') {
       vf = this.features[vendor];
       vf.forEach(function(f, id) {
         if (f.name === feature) {
@@ -143,7 +140,7 @@ flexlm.prototype = {
 
   findExpirations: function findExpirations(vendor) {
     var d = new Date();
-    var dsnow = dateFormat(d, "dd-mmm-yyyy");
+    var dsnow = dateFormat(d, 'dd-mmm-yyyy');
     var dnow = Date.parse(dsnow);
     var features = this.getFeatures(vendor);
     var expired = [];
@@ -190,13 +187,12 @@ flexlm.prototype = {
 };
 
 function parseVendor(line) {
-var vendor = {
-               "name" : null,
-               "path" : null,
-               "options" : null,
-               "port" : null,
-
-             };
+  var vendor = {
+    'name' : null,
+    'path' : null,
+    'options' : null,
+    'port' : null,
+  };
   if (line.length > 1) {
     vendor.name = line[1] || null;
     vendor.path = line[2] || null;
@@ -208,11 +204,11 @@ var vendor = {
 }
 
 function parseServer(line) {
-var server = {
-               "name" : null,
-               "id" : null,
-               "port" : null
-             };
+  var server = {
+    'name' : null,
+    'id' : null,
+    'port' : null
+  };
   if (line.length > 1) {
     server.name = line[1] || null;
     server.id = line[2] || null;
@@ -223,13 +219,13 @@ var server = {
 }
 
 function parseFeature(line) {
-var feature = {
-               "name" : null,
-               "version" : null,
-               "vendor" : null,
-               "expDate" : null,
-               "licCount" : null,
-             };
+  var feature = {
+    'name' : null,
+    'version' : null,
+    'vendor' : null,
+    'expDate' : null,
+    'licCount' : null,
+  };
   if (line.length > 1) {
     feature.name = line[1] || null;
     feature.vendor = line[2] || null;
@@ -237,7 +233,7 @@ var feature = {
     feature.expDate = line[4] || null;
     feature.licCount = line[5] || null;
     var kv;
-    var featurename = "";
+    var featurename = '';
     var joinnext = false;
     for (var i=6; i< line.length; i++) {
       if (line[i].indexOf('=') >= 0) {
@@ -250,7 +246,7 @@ var feature = {
           featurename = line[i];
           feature[featurename] = true;
         } else {
-          feature[featurename] = feature[featurename] + " " + line[i];
+          feature[featurename] = feature[featurename] + ' ' + line[i];
           joinnext = ! (line[i].indexOf('"') >= 0);
         }
       }
