@@ -156,7 +156,7 @@ flexlm.prototype = {
           var df = Date.parse(f.expDate);
           days = Math.floor((df-dnow)/86400000);
         }
-        expired.push({name : f.name, expires: days });
+        expired.push({name : f.name, version: f.version, expires: days });
       });
     }
     return expired;
@@ -169,7 +169,7 @@ flexlm.prototype = {
     expirations.forEach(function(e) {
       if (e.expires !== 'never') {
         if (e.expires <= days) {
-          expired.push({name : e.name, expires: e.expires });
+          expired.push({name : e.name, version: e.version, expires: e.expires });
         }
       }
     });
@@ -181,7 +181,7 @@ flexlm.prototype = {
     var self = this;
     this.getVendors().forEach(function(v) {
       self.findExpirations(v).forEach(function(e) {
-        expired.push({vendor : v, feature : e.name, expires : e.expires});
+        expired.push({vendor : v, feature : e.name, version: e.version, expires : e.expires});
       });
     });
     return expired;
@@ -225,6 +225,7 @@ var server = {
 function parseFeature(line) {
 var feature = {
                "name" : null,
+               "version" : null,
                "vendor" : null,
                "expDate" : null,
                "licCount" : null,
