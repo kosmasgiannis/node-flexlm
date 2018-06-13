@@ -198,14 +198,44 @@ function parseVendor(line) {
     'options' : null,
     'port' : null,
   };
-  if (line.length > 1) {
-    vendor.name = line[1] || null;
-    vendor.path = line[2] || null;
-    vendor.options = line[3] || null;
-    vendor.port = line[4] || null;
-    return vendor;
+  var i;
+  var value;
+  var c = -2;
+  for (i = 0; i < line.length; i++) {
+    value = null;
+    if (line[i] !== '') {
+      if (line[i].toLowerCase().indexOf('port=') !== -1) {
+        value = line[i].substr(line[i].toLowerCase().indexOf('port=')+5);
+        c = 3;
+      } else if (line[i].toLowerCase().indexOf('options=') !== -1) {
+        value = line[i].substr(line[i].toLowerCase().indexOf('options=')+8);
+        c = 2;
+      } else {
+        value=line[i];
+        c++;
+      }
+      switch (c) {
+        case 0:
+          vendor.name = value;
+          break;
+        case 1:
+          vendor.path = value;
+          break;
+        case 2:
+          vendor.options = value;
+          break;
+        case 3:
+          vendor.port = parseInt(value, 10);
+          if (isNaN(vendor.port)) {
+            vendor.port = value;
+          }
+          break;
+        default:
+          break;
+      }
+    }
   }
-  return null;
+  return ((c !== -1) ? vendor : null);
 }
 
 function parseServer(line) {
